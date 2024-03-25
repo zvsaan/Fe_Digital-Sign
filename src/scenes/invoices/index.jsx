@@ -25,26 +25,21 @@ const Invoices = () => {
       headerName: "Email",
       flex: 1,
     },
-    {
-      field: "cost",
-      headerName: "Cost",
-      flex: 1,
-      renderCell: (params) => (
-        <Typography color={colors.greenAccent[500]}>
-          ${params.row.cost}
-        </Typography>
-      ),
-    },
+    // {
+    //   field: "cost",
+    //   headerName: "Cost",
+    //   flex: 1,
+    // },
     {
       field: "date",
-      headerName: "Date",
+      headerName: "Action",
       flex: 1,
     },
   ];
 
   return (
     <Box m="20px">
-      <Header title="INVOICES" subtitle="List of Invoice Balances" />
+      <Header title="DATA USER" subtitle="List of Data User" />
       <Box
         m="40px 0 0 0"
         height="75vh"

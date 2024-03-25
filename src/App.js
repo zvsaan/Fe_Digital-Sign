@@ -7,7 +7,7 @@ import Team from "./scenes/team";
 import Invoices from "./scenes/invoices";
 import Contacts from "./scenes/contacts";
 import Form from "./scenes/form";
-// import Login from "./scenes/login";
+import Login from "./scenes/login";
 // import Register from "./scenes/register";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
@@ -39,6 +39,10 @@ function App() {
             </Routes>
           </main>
         </div>
+        {/* Tambahkan rute untuk halaman login di luar elemen main */}
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
