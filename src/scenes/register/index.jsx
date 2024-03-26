@@ -2,65 +2,57 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-const LoginForm = () => {
+const RegistrationForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const [notification, setNotification] = useState({ open: false, message: '', severity: 'error' });
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setNotification({ ...notification, open: false });
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/auth/login', {
+      const response = await fetch('http://localhost:8000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-  
+
       const responseData = await response.json();
-  
+
       if (response.ok) {
-        console.log('Login successful', responseData);
-        localStorage.setItem('token', responseData.access_token);
-        setNotification({ open: true, message: 'Login successful. Redirecting...', severity: 'success' });
+        console.log('Registration successful', responseData);
+        setSuccessMessage('Account successfully registered. You can now sign in.');
+        setOpenSnackbar(true);
         setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 3000);
+          window.location.href = '/login';
+        }, 3000); // Redirect after 3 seconds
       } else {
-        console.error('Login failed', responseData.error);
-        if (response.status === 404) {
-          setNotification({ open: true, message: 'Account not found. Please sign up.', severity: 'error' });
-        } else if (response.status === 401) {
-          setNotification({ open: true, message: 'Password is incorrect.', severity: 'error' });
-        } else {
-          setNotification({ open: true, message: responseData.error || 'Login failed. Please try again.', severity: 'error' });
-        }
+        console.error('Registration failed', responseData.error);
+        setErrorMessage(responseData.error || 'Registration failed. Email already exists');
+        setOpenSnackbar(true);
       }
     } catch (error) {
-      console.error('Error during login:', error.message);
-      setNotification({ open: true, message: 'An error occurred during login. Please try again later.', severity: 'error' });
+      console.error('Error during registration:', error.message);
+      setErrorMessage('An error occurred during registration. Please try again later.');
+      setOpenSnackbar(true);
     }
-  };     
+  };
 
   return (
     <Box
@@ -76,8 +68,22 @@ const LoginForm = () => {
       }}
     >
       <Typography variant="h5" component="div" sx={{ mb: 2 }}>
-        Login Form
+        Registration Form
       </Typography>
+      <TextField
+        fullWidth
+        label="Name"
+        {...register('name', {
+          required: 'Name is required',
+          minLength: {
+            value: 2,
+            message: 'Name must be at least 2 characters',
+          },
+        })}
+        error={Boolean(errors.name)}
+        helperText={errors.name?.message}
+        margin="normal"
+      />
       <TextField
         fullWidth
         label="Email"
@@ -106,28 +112,34 @@ const LoginForm = () => {
         error={Boolean(errors.password)}
         helperText={errors.password?.message}
         margin="normal"
-        sx={{ mt: 2 }}
       />
-      <FormControlLabel
-        control={<Checkbox {...register('rememberMe')} color="primary" />}
-        label="Remember Me"
-        sx={{ mt: 1, textAlign: 'left' }}
+      <TextField
+        fullWidth
+        type="password"
+        label="Confirm Password"
+        {...register('password_confirmation', {
+          required: 'Please confirm your password',
+          validate: (value) => value === watch('password') || 'Passwords do not match',
+        })}
+        error={Boolean(errors.password_confirmation)}
+        helperText={errors.password_confirmation?.message}
+        margin="normal"
       />
       <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-        Login
+        Register
       </Button>
       <Snackbar
-        open={notification.open}
+        open={openSnackbar}
         autoHideDuration={6000}
-        onClose={handleSnackbarClose}
+        onClose={handleCloseSnackbar}
       >
         <MuiAlert
           elevation={6}
           variant="filled"
-          onClose={handleSnackbarClose}
-          severity={notification.severity}
+          onClose={handleCloseSnackbar}
+          severity={successMessage ? 'success' : 'error'}
         >
-          {notification.message}
+          {successMessage || errorMessage}
         </MuiAlert>
       </Snackbar>
       <Box sx={{ mt: 2, textAlign: 'center' }}>
@@ -135,8 +147,8 @@ const LoginForm = () => {
           Forgot Password?
         </Link>
         <Box mt={1}>
-          <Link href="/register" variant="body2">
-            Don't have an account? Sign Up
+          <Link href="/login" variant="body2">
+            You have an account? Sign In
           </Link>
         </Box>
       </Box>
@@ -144,4 +156,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegistrationForm;
