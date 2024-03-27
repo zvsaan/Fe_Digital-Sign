@@ -48,7 +48,7 @@ const LoginForm = () => {
         localStorage.setItem('token', responseData.access_token);
         setNotification({ open: true, message: 'Login successful. Redirecting...', severity: 'success' });
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          window.location.href = '/';
         }, 3000);
       } else {
         console.error('Login failed', responseData.error);
