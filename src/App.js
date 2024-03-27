@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Route, Routes, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
@@ -8,55 +8,55 @@ import Invoices from "./scenes/invoices";
 import Contacts from "./scenes/contacts";
 import Form from "./scenes/form";
 import Login from "./scenes/login";
-import RegistrationForm from "./scenes/register";
+import Register from "./scenes/register";
 import FAQ from "./scenes/faq";
+import NotFoundPage from "./scenes/404";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
 function App() {
   const [theme, colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+  const shouldShowSidebarAndTopbar = (path) => {
+    return !["/login", "/register"].includes(path);
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div className="app">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Outlet />
-              </>
-            }
-          >
-            <Route path="/" element={<Login />} />
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="app">
+          {shouldShowSidebarAndTopbar(window.location.pathname) && (
+            <>
+              <Sidebar isSidebar={isSidebarVisible} />
+              <main className="content">
+                <Topbar setIsSidebar={setIsSidebarVisible} />
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/invoices" element={<Invoices />} />
+                  <Route path="/form" element={<Form />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </main>
+            </>
+          )}
+          <Routes>
             <Route
-              path="/dashboard"
-              element={
-                <>
-                  <ColorModeContext.Provider value={colorMode}>
-                    <Sidebar isSidebar={isSidebar} />
-                    <main className="content">
-                      <Topbar setIsSidebar={setIsSidebar} />
-                      <Dashboard />
-                    </main>
-                  </ColorModeContext.Provider>
-                </>
-              }
+              path="/login"
+              element={<Login setIsSidebar={setIsSidebarVisible} />}
             />
-            <Route path="/team" element={<Team />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/invoices" element={<Invoices />} />
-            <Route path="/form" element={<Form />} />
-            <Route path="/faq" element={<FAQ />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<RegistrationForm />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
-    </ThemeProvider>
+            <Route
+              path="/register"
+              element={<Register setIsSidebar={setIsSidebarVisible} />}
+            />
+          </Routes>
+        </div>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
