@@ -7,6 +7,9 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const RegistrationForm = () => {
   const {
@@ -18,6 +21,8 @@ const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -41,7 +46,7 @@ const RegistrationForm = () => {
         setOpenSnackbar(true);
         setTimeout(() => {
           window.location.href = '/login';
-        }, 3000); // Redirect after 3 seconds
+        }, 3000);
       } else {
         console.error('Registration failed', responseData.error);
         setErrorMessage(responseData.error || 'Registration failed. Email already exists');
@@ -61,14 +66,14 @@ const RegistrationForm = () => {
       sx={{
         maxWidth: '500px',
         margin: 'auto',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        padding: '60px',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
         backgroundColor: 'white',
       }}
     >
-      <Typography variant="h5" component="div" sx={{ mb: 2 }}>
-        Registration Form
+      <Typography variant="h3" component="div" sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold' }}>
+        Sign Up
       </Typography>
       <TextField
         fullWidth
@@ -100,7 +105,7 @@ const RegistrationForm = () => {
       />
       <TextField
         fullWidth
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         label="Password"
         {...register('password', {
           required: 'Password is required',
@@ -112,10 +117,21 @@ const RegistrationForm = () => {
         error={Boolean(errors.password)}
         helperText={errors.password?.message}
         margin="normal"
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              onClick={() => setShowPassword((prev) => !prev)}
+              edge="end"
+              aria-label="toggle password visibility"
+            >
+              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          ),
+        }}
       />
       <TextField
         fullWidth
-        type="password"
+        type={showConfirmPassword ? 'text' : 'password'}
         label="Confirm Password"
         {...register('password_confirmation', {
           required: 'Please confirm your password',
@@ -124,6 +140,17 @@ const RegistrationForm = () => {
         error={Boolean(errors.password_confirmation)}
         helperText={errors.password_confirmation?.message}
         margin="normal"
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              edge="end"
+              aria-label="toggle confirm password visibility"
+            >
+              {showConfirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          ),
+        }}
       />
       <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
         Register
@@ -147,9 +174,12 @@ const RegistrationForm = () => {
           Forgot Password?
         </Link>
         <Box mt={1}>
-          <Link href="/login" variant="body2">
-            You have an account? Sign In
-          </Link>
+          <Typography variant="body2" component="span">
+            You have an account?{' '}
+            <Link href="/login" variant="body2">
+              Sign In
+            </Link>
+          </Typography>
         </Box>
       </Box>
     </Box>

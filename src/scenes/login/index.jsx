@@ -9,6 +9,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const LoginForm = () => {
   const {
@@ -18,6 +21,7 @@ const LoginForm = () => {
   } = useForm();
 
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'error' });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -48,10 +52,12 @@ const LoginForm = () => {
         }, 3000);
       } else {
         console.error('Login failed', responseData.error);
-        if (response.status === 404) {
-          setNotification({ open: true, message: 'Account not found. Please sign up.', severity: 'error' });
-        } else if (response.status === 401) {
-          setNotification({ open: true, message: 'Password is incorrect.', severity: 'error' });
+        if (response.status === 401) {
+          if (responseData.error === 'Email not found. Please sign up.') {
+            setNotification({ open: true, message: 'Email not found. Please sign up.', severity: 'error' });
+          } else {
+            setNotification({ open: true, message: 'Invalid email or password.', severity: 'error' });
+          }
         } else {
           setNotification({ open: true, message: responseData.error || 'Login failed. Please try again.', severity: 'error' });
         }
@@ -60,7 +66,7 @@ const LoginForm = () => {
       console.error('Error during login:', error.message);
       setNotification({ open: true, message: 'An error occurred during login. Please try again later.', severity: 'error' });
     }
-  };     
+  };       
 
   return (
     <Box
@@ -69,14 +75,14 @@ const LoginForm = () => {
       sx={{
         maxWidth: '500px',
         margin: 'auto',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        padding: '60px',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
         backgroundColor: 'white',
       }}
     >
-      <Typography variant="h5" component="div" sx={{ mb: 2 }}>
-        Login Form
+      <Typography variant="h3" component="div" sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold' }}>
+        Sign In
       </Typography>
       <TextField
         fullWidth
@@ -94,7 +100,7 @@ const LoginForm = () => {
       />
       <TextField
         fullWidth
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         label="Password"
         {...register('password', {
           required: 'Password is required',
@@ -106,6 +112,17 @@ const LoginForm = () => {
         error={Boolean(errors.password)}
         helperText={errors.password?.message}
         margin="normal"
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              onClick={() => setShowPassword((prev) => !prev)}
+              edge="end"
+              aria-label="toggle password visibility"
+            >
+              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          ),
+        }}
         sx={{ mt: 2 }}
       />
       <FormControlLabel
@@ -135,9 +152,12 @@ const LoginForm = () => {
           Forgot Password?
         </Link>
         <Box mt={1}>
-          <Link href="/register" variant="body2">
-            Don't have an account? Sign Up
-          </Link>
+          <Typography variant="body2" component="span">
+            Don't have an account?{' '}
+            <Link href="/register" variant="body2">
+              Sign Up
+            </Link>
+          </Typography>
         </Box>
       </Box>
     </Box>
