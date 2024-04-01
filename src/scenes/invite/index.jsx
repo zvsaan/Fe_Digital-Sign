@@ -8,6 +8,7 @@ const InvitePage = () => {
   const sendInvite = () => {
     // Implement code to send invite
     alert(`Invite sent to ${email}`);
+    window.open('https://mail.google.com/', '_blank');
   };
 
   const handleDocumentChange = (event) => {
