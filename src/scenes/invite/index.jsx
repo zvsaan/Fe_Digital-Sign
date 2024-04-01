@@ -1,69 +1,60 @@
-import React, { useState } from 'react';
-import { Box, Button, Typography, TextField } from "@mui/material";
-import Header from '../../components/Header';
+import { Box, Button, TextField, useTheme } from "@mui/material";
+import { tokens } from "../../theme";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import Header from "../../components/Header";
 
 const InvitePage = () => {
-  const [email, setEmail, document, setDocument] = useState(null);
-
-  const sendInvite = () => {
-    // Implement code to send invite
-    alert(`Invite sent to ${email}`);
-  };
-
-  const handleDocumentChange = (event) => {
-    const file = event.target.files[0];
-    setDocument(file);
-  };
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   const handleSubmit = () => {
-    // Lakukan sesuatu dengan dokumen yang diunggah, misalnya mengirim ke server
-    console.log("Dokumen yang diunggah:", document);
+    // Logika untuk mengirim undangan
+    console.log('Form telah disubmit');
   };
 
   return (
     <Box m="20px">
-      <Header title="INVITE SIGN" subtitle="Invite User Digital Sign" />
-
-<Box
-      gridColumn="span 9"
-      mt={4}
-      display="flex"
-      justifyContent="left"
-      alignItems="left"
-    >
-        <Box width="80%">
-        <Typography variant="h6" gutterBottom>
-          Unggah Dokumen PDF
-        </Typography>
-        <Box display="flex" alignItems="center" mb={2}>
-          <TextField
-            type="file"
-            onChange={handleDocumentChange}
-            InputLabelProps={{ shrink: true }}
-            variant="outlined"
-            fullWidth
-          />
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header title="Undang Penandatangan" subtitle="Please invite Signatories" />
+      </Box>
+      <Box display="flex" mt={3}>
+        <Box
+          border={1}
+          borderRadius={1}
+          p={3}
+          borderColor="#cccccc"
+        >
+          <form onSubmit={handleSubmit}>
+            <Box display="flex" alignItems="center" mb={2}>
+              <TextField
+                label="Nama"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+              />
+              <Box ml={2}>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  margin="dense"
+                />
+              </Box>
+            </Box>
+            <Box display="flex" justifyContent="center">
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<DownloadOutlinedIcon />}
+                type="submit"
+              >
+                Kirim
+              </Button>
+            </Box>
+          </form>
         </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          disabled={!document}>Unggah
-        </Button>
-        <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Masukkan alamat Email tujuan"
-      />
-      
-      <Button 
-      variant="contained"
-      color="primary"
-      onClick={sendInvite}>Send Invite</Button>
       </Box>
-      </Box>
-      </Box>
+    </Box>
   );
 };
 
