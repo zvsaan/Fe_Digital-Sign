@@ -4,8 +4,18 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Header from "../../components/Header";
 
 const InvitePage = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const [email, setEmail, document, setDocument] = useState(null);
+
+  const sendInvite = () => {
+    // Implement code to send invite
+    alert(`Invite sent to ${email}`);
+    window.open('https://mail.google.com/', '_blank');
+  };
+
+  const handleDocumentChange = (event) => {
+    const file = event.target.files[0];
+    setDocument(file);
+  };
 
   const handleSubmit = () => {
     // Logika untuk mengirim undangan
