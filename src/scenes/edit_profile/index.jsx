@@ -75,6 +75,18 @@ const handleChange = (e) => {
             <TextField
               fullWidth
               variant="filled"
+              label="Email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
+              sx={{ marginBottom: '16px' }}
+            />
+            <TextField
+              fullWidth
+              variant="filled"
               label="Phone Number"
               name="phoneNumber"
               value={values.phoneNumber}

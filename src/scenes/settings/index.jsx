@@ -22,14 +22,6 @@ const Settings = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setProfileData((prevData) => ({
-      ...prevData,
-      profilePicture: file,
-    }));
-  };
-
   const handleSubmit = (values) => {
     console.log(values);
     // Implementasi penyimpanan data ke backend bisa dilakukan di sini
@@ -107,19 +99,15 @@ const Settings = () => {
               helperText={touched.country && errors.country}
               sx={{ marginBottom: '16px' }}
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ marginBottom: '16px' }}
-            />
+             <Box display="flex" flexDirection="column" alignItems="center">
             <Button
-              type="submit"
-              color="primary"
-              variant="contained"
-            >
-              Save
-            </Button>
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    sx={{ width: '200px' }} // Lebar tombol disesuaikan
+                >Save
+                </Button>
+                </Box>
           </form>
         )}
       </Formik>
