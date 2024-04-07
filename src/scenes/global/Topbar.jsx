@@ -13,6 +13,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { Link } from 'react-router-dom';
 
 const Topbar = () => {
   const theme = useTheme();
@@ -113,32 +114,32 @@ const Topbar = () => {
                   <Divider />
                 </Grid>
                 <Grid item xs={12}>
-                  <List>
-                    <ListItem button onClick={handlePopoverClose}>
-                      <ListItemIcon>
-                        <SettingsOutlinedIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Settings" />
-                    </ListItem>
-                    <ListItem button onClick={handlePopoverClose}>
-                      <ListItemIcon>
-                        <AccountCircleOutlinedIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Profile" />
-                    </ListItem>
-                    <ListItem button onClick={handlePopoverClose}>
-                      <ListItemIcon>
-                        <HelpOutlineOutlinedIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="FAQ" />
-                    </ListItem>
-                    <ListItem button onClick={handleLogout}>
-                      <ListItemIcon>
-                        <LogoutOutlinedIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Logout" />
-                    </ListItem>
-                  </List>
+                <List>
+                  <ListItem button component={Link} to="/settings" onClick={handlePopoverClose}>
+                    <ListItemIcon>
+                      <SettingsOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Settings" />
+                  </ListItem>
+                  <ListItem button component={Link} to="/editprofile" onClick={handlePopoverClose}>
+                    <ListItemIcon>
+                      <AccountCircleOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit Profile" />
+                  </ListItem>
+                  <ListItem button component={Link} to="/faq" onClick={handlePopoverClose}>
+                    <ListItemIcon>
+                      <HelpOutlineOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="FAQ" />
+                  </ListItem>
+                  <ListItem button onClick={handleLogout}>
+                    <ListItemIcon>
+                      <LogoutOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                  </ListItem>
+                </List>
                 </Grid>
               </Grid>
             </Box>

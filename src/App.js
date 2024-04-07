@@ -12,6 +12,8 @@ import Register from "./scenes/register";
 import FAQ from "./scenes/faq";
 import NotFoundPage from "./scenes/404";
 import InvitePage from "./scenes/invite";
+import EditProfile from "./scenes/edit_profile";
+import Settings from "./scenes/settings";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
@@ -42,6 +44,8 @@ function App() {
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="*" element={<NotFoundPage />} />
                   <Route path="/invite" element={<InvitePage />} />
+                  <Route path="/editprofile" element={<EditProfile />} />
+                  <Route path="/settings" element={<Settings />} />
                 </Routes>
               </main>
             </>
