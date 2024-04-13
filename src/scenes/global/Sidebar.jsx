@@ -96,7 +96,8 @@ const Sidebar = () => {
               </Box>
               <Box textAlign="center">
                 <Typography variant="h5" color={colors.greenAccent[500]} sx={{ mt: "20px" }}>
-                  Fauzi Ihsan Anshori
+                  {
+                 JSON.stringify(localStorage.getItem('emailUser'))}
                 </Typography>
               </Box>
             </Box>
@@ -112,7 +113,7 @@ const Sidebar = () => {
             />
             <Item
               title="Document"
-              to="/invoices"
+              to="/document"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

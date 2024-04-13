@@ -47,6 +47,10 @@ const LoginForm = () => {
         console.log('Login successful', responseData);
         localStorage.setItem('token', responseData.access_token);
         setNotification({ open: true, message: 'Login successful. Redirecting...', severity: 'success' });
+        localStorage.setItem('idUser', responseData.user?.id)
+        localStorage.setItem('nameUser', responseData.user?.name)
+        localStorage.setItem('emailUser', responseData.user?.email)
+        localStorage.setItem('fotoUser', responseData.user?.foto)
         setTimeout(() => {
           window.location.href = '/';
         }, 3000);

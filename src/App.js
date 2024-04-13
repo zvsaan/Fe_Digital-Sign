@@ -14,6 +14,7 @@ import NotFoundPage from "./scenes/404";
 import InvitePage from "./scenes/invite";
 import EditProfile from "./scenes/edit_profile";
 import Settings from "./scenes/settings";
+import DataDocument from "./scenes/document";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
@@ -39,6 +40,7 @@ function App() {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/team" element={<Team />} />
                   <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/document" element={<DataDocument />} />
                   <Route path="/invoices" element={<Invoices />} />
                   <Route path="/form" element={<Form />} />
                   <Route path="/faq" element={<FAQ />} />

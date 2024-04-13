@@ -1,46 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Header from "../../components/Header";
+import axios from 'axios';
 
-const EditProfile = () => {
+const EditProfile = ({ userId }) => {
   const [profileData, setProfileData] = useState({
     name: '',
-    phoneNumber: '',
-    address: '',
-    country: '',
-    profilePicture: null,
+    email: '',
+    no_tlfn: '',
+    alamat: '',
+    ttd: null,
   });
 
-  // eslint-disable-next-line no-unused-vars
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setProfileData((prevData) => ({
-    ...prevData,
-    [name]: value,
-  }));
-};
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/users/${userId}`);
+        const userData = response.data.user;
+        setProfileData(userData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
 
+    fetchUserData();
+  }, [userId]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setProfileData((prevData) => ({
       ...prevData,
-      profilePicture: file,
+      ttd: file,
     }));
   };
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    // Implementasi penyimpanan data ke backend bisa dilakukan di sini
+  const handleSubmit = async (values) => {
+    try {
+      const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('email', values.email);
+      formData.append('no_tlfn', values.no_tlfn);
+      formData.append('alamat', values.alamat);
+      formData.append('ttd', values.ttd);
+
+      await axios.put(`http://localhost:8000/api/usersupdate/${userId}`, formData);
+
+      console.log("User data updated successfully!");
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
   };
 
   const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
-    phoneNumber: yup.string().required("Phone Number is required"),
-    address: yup.string().required("Address is required"),
-    country: yup.string().required("Country is required"),
+    email: yup.string().required("Email is required"),
+    no_tlfn: yup.string().required("Phone Number is required"),
+    alamat: yup.string().required("Alamat is required"),
   });
 
   return (
@@ -88,54 +105,41 @@ const handleChange = (e) => {
               fullWidth
               variant="filled"
               label="Phone Number"
-              name="phoneNumber"
-              value={values.phoneNumber}
+              name="no_tlfn"
+              value={values.no_tlfn}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-              helperText={touched.phoneNumber && errors.phoneNumber}
+              error={touched.no_tlfn && Boolean(errors.no_tlfn)}
+              helperText={touched.no_tlfn && errors.no_tlfn}
               sx={{ marginBottom: '16px' }}
             />
             <TextField
               fullWidth
               variant="filled"
-              label="Address"
-              name="address"
-              value={values.address}
+              label="Alamat"
+              name="alamat"
+              value={values.alamat}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.address && Boolean(errors.address)}
-              helperText={touched.address && errors.address}
-              sx={{ marginBottom: '16px' }}
-            />
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Country"
-              name="country"
-              value={values.country}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.country && Boolean(errors.country)}
-              helperText={touched.country && errors.country}
+              error={touched.alamat && Boolean(errors.alamat)}
+              helperText={touched.alamat && errors.alamat}
               sx={{ marginBottom: '16px' }}
             />
             <Box display="flex" flexDirection="column" alignItems="center">
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    style={{ marginBottom: '12px' }}
-                />
-                <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    sx={{ width: '200px' }} // Lebar tombol disesuaikan
-                >Save
-                </Button>
-                </Box>
-
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ marginBottom: '12px' }}
+              />
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                sx={{ width: '200px' }}
+              >Save
+              </Button>
+            </Box>
           </form>
         )}
       </Formik>
